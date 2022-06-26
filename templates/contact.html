@@ -1,0 +1,76 @@
+{% extends 'base.html'%}
+{% block title %} Biz bilan bog'lanish | X.A{% endblock %}
+{%block mycontent%}
+<style>
+    body{
+    background: linear-gradient(to right, #0062E6, #33AEFF);
+    }
+    .sec{
+    border-radius:15px;
+    margin-top:50px;
+    background:white;
+    }
+</style>
+<section class="mb-2 mt-5 p-5 container sec">
+    <h2 class="h1-responsive font-weight-bold text-center my-4">Biz bilan bog'lanish</h2>
+    <p class="text-center w-responsive mx-auto mb-5 "><strong>Savollaringiz bormi? Unda biz bilan bevosita bog'lanishda ikkilanmang. Bizning jamoamiz sizga <span style="color:red;">24</span> soat ichida
+        elektron pochtangizda javobni yuboramiz. Sizga yordam berishdan mamnunmiz!</strong></p>
+    <div class="row">
+        <div class="col-md-9 mb-md-0 mb-5">
+            <form method="post">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="md-form mb-0">
+                            <label for="name" class="mb-2"><strong>To'liq ismingiz:</strong></label>
+                            <input type="text" placeholder="To'liq ismingizni kiriting. . ." id="name" required name="ism" class="form-control mb-2">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="md-form mb-0">
+                            <label for="email" class="mb-2"><strong>Elektron pochta:</strong></label>
+                            <input type="email"  placeholder="E-mail kiriting. . ." id="email" name="email" required class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="md-form mb-0">
+                            <label for="subject" class="mb-2"><strong>Mavzu:</strong></label>
+                            <input type="text" placeholder="Mavzu nomini yozing. . ." id="subject" required name="mavzu" class="form-control mb-2">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="md-form">
+                            <label class="mb-2"><strong>Xabar:</strong></label>
+                            <textarea type="text" name="xabar" rows="2" style="resize:none;" required placeholder="Yuboradigan xabaringizni yozing. . ." class="form-control md-textarea"></textarea>
+                        </div>
+                        {%if status%}
+                        <div>
+                            <p style="color:blue;">{{status}}</p>
+                        </div>
+                        {%endif%}
+                    </div>
+                </div>
+            <div class="text-center text-md-left">
+                <div class="form-group">
+                     <input type="submit" class="btn btn-primary mt-2" value="Jo'natish">
+                </div>
+            </div>
+            </form>
+        </div>
+        <div class="col-md-3 text-center">
+            <ul class="list-unstyled mb-0">
+                <li class="mt-4"><i style="color:#0062E6;" class="fas fa-phone mt-5 fa-2x"></i>
+                    <p><strong>+998 33 367 62 62</strong></p>
+                </li>
+                <li><i style="color:#0062E6;" class="fas fa-envelope mt-4 fa-2x"></i>
+                    <p><strong>topshiriqlarim.info@gmail.com</strong></p>
+                </li>
+            </ul>
+        </div>
+    </div>
+</section>
+{%endblock%}

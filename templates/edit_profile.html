@@ -1,0 +1,134 @@
+{% extends 'base.html'%}
+{% block title %}Kabinetni tahrirlash | X.A{% endblock %}
+{% block mycontent %}
+<div class="container-fluid" style="min-height:100vh !important;">
+    <h2 class="text-center">Profilni Tahrirlash</h2>
+    <hr>
+    <div class="row">
+        <div class="col-md-12 mx-auto">
+            <form action="" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="form-label">Ism</label>
+                            <input type="text" class="form-control" name="fname" placeholder="Ismingizni kiriting:" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" >Familya</label>
+                            <input type="text" class="form-control" name="lname" placeholder="Ismingizni kiriting:" required>
+                        </div>
+                    </div>
+                </div>
+               <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="form-label">Jins</label>
+                            <select name="gender" class="form-control">
+                                <option value="Male">Erkak</option>
+                                <option value="Female">Ayol</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Tug'ilgan Sana</label>
+                            <input type="date" class="form-control" name="birth" placeholder="Tugilgan sanangizni kiriting:" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <p id="result"></p>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="form-label">Foydalanuvchi nomi</label>
+                            <input onkeyup="checkuser()" type="text" class="form-control" id="username" name="username" placeholder="Foydalanuvchi nomini kiriting:" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">E-pochta</label>
+                            <input type="email" class="form-control" id="" name="email" placeholder="E-pochtangizni kiriting:" required>
+                        </div>
+                    </div>
+                </div>
+               <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="form-label">Telefon Raqam</label>
+                            <input type="tel" class="form-control" name="pnumber" placeholder="Telefon raqam:" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Davlatni Tanlang</label>
+                            <select onchange="load_cities()" name="country" id="country" class="form-control">
+                                <option value="">--Davlatni Tanlang--</option>
+                                {% for country in countries %}
+                                <option  value="{{country.id}}">{{country.name}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+             <div class="form-group">
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="form-label">Shaharni Tanlang</label>
+                        <select name="cities" id="cities" class="form-control">
+
+</select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Manzil</label>
+                        <input type="text" class="form-control" name="address" placeholder="Manzilingiz:" required>
+                    </div>
+                </div>
+                </div>
+            <div class="form-group">
+                    <label for="" class="form-label">O'zingiz haqingizda</label>
+                    <textarea class="form-control" name="about" rows="7" placeholder="O'zingiz haqingizda yozing..."></textarea>
+                </div>
+             <div class="form-group mt-2 mb-5">
+                    <input type="submit" name="btn" class="btn btn-success" value="Qayta Saqlash" id="submitbtn">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+function checkuser(){
+   let username=document.getElementById('username').value;
+    $.ajax({
+        url:"{% url 'check_user' %}",
+        type:"get",
+        data:{usern:username},
+        success:function(data){
+            if(data=='Exists'){
+                $('#result').html('Bu foydalanuvchi mavjud').addClass('text-danger');
+                $('#username').addClass('alert alert-danger');
+                $('#submitbtn').attr('disabled','disabled');
+            }
+            else{
+                $('#result').html('');
+                $('#submitbtn').removeAttr('disabled');
+                $('#username').removeClass('alert alert-danger');
+                $('#submitbtn').removeAttr('disabled','disabled');
+            }
+        }
+    })
+}
+
+
+function load_cities(){
+    let countryId=document.getElementById('country').value;
+    console.log(countryId)
+    $.ajax({
+        url:"{% url 'load_cities' %}",
+        type:"get",
+        data:{country:countryId},
+        success:function(data){
+            $('#cities').html(data);
+        }
+
+    })
+}
+</script>
+{% endblock %}

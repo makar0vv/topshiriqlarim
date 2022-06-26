@@ -1,0 +1,124 @@
+{% extends 'base.html'%}
+{% block title %} Ro'yhatdan o'tish | X.A{% endblock %}
+{% block mycontent %}
+<style>
+  body{
+  background: linear-gradient(to right, #0062E6, #33AEFF);
+  }
+  .gradient-custom {
+  background: linear-gradient(to right, #0062E6, #33AEFF);
+  height:92.9vh;
+}
+
+.card-registration .select-input.form-control[readonly]:not([disabled]) {
+font-size: 1rem;
+line-height: 2.5;
+padding-left: .75em;
+padding-right: .75em;
+}
+.card-registration .select-arrow {
+top: 13px;
+}
+</style>
+<section class="vh-90 gradient-custom">
+  <div class="container py-5">
+    <div class="row justify-content-center align-items-center h-100">
+      <div class="col-12 col-lg-9 col-xl-7">
+        <div class="card shadow-2-strong card-registration" style="border-radius: 15px;">
+          <div class="card-body p-4 p-md-5">
+            <h3 class="mb-4 pb-2 pb-md-0 mb-md-5"><strong>Ro'yhatdan o'tish</strong></h3>
+            <form method="post">
+              {% csrf_token %}
+              <div class="row">
+                <div class="col-md-6 mb-4">
+                  <div class="form-outline">
+                    <label class="form-label"><strong>Ismingiz:</strong></label>
+                    <input type="text" placeholder="Ismingizni kiriting. . ." name="fname" required class="form-control form-control-lg" />
+                  </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                  <div class="form-outline">
+                    <label class="form-label"><strong>Familiyangiz:</strong></label>
+                    <input type="text" placeholder="Familiyangizni kiriting. . . " name="lname" required class="form-control form-control-lg" />
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6 mb-4">
+                  <div class="form-outline">
+                    <label class="form-label"><strong>Foydalanuvchi nomi:</strong></label>
+                    <input onkeyup="checkuser()" placeholder="Foydalanuvchi nomini kiriting" type="text" id="username" name="uname" required class="form-control form-control-lg" />
+<!--                    {%if u5 %}-->
+<!--                    <p style="color:red;">{{u5}}</p>-->
+<!--                    {% endif %}-->
+                  </div>
+                  <p id="result"></p>
+                </div>
+                <div class="col-md-6 mb-4">
+
+                  <div class="form-outline">
+                    <label class="form-label"><strong>Elektron pochta:</strong></label>
+                    <input type="email" name="email" placeholder="E-pochtangizni kiriting" required class="form-control form-control-lg" />
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-outline">
+                    <label class="form-label"><strong>Parol:</strong></label>
+                    <input onkeyup="checkuser()" placeholder="Yangi parolni kiriting" id="password1" type="password" name="pwd" required class="form-control form-control-lg" />
+                    {%if pdw8%}
+                      <p style="color:red;">{{pdw8}}</p>
+                    {%endif%}
+                  </div>
+                <p id="resultpwd"></p>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-outline">
+                    <label class="form-label"><strong>Tastiqlovchi parol:</strong></label>
+                    <input onkeyup="checkuser()" placeholder="Tastiqlovchi parolni kiriting" id="password2" type="password" name="pwd2" required class="form-control form-control-lg" />
+                  </div>
+                </div>
+              <div class=" pt-1">
+                  <input type="submit" name="btn" class="btn btn-success" value="Ro'yxatdan o'tish" id="submitbtn">
+              </div>
+              </div>
+
+
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<script>
+function checkuser(){
+  let username=document.getElementById('username').value;
+  let pwd1=document.getElementById('password1').value;
+  let pwd2=document.getElementById('password2').value;
+  $.ajax({
+    type:"get",
+    url:"{% url 'check_user' %}",
+    data:{username:username},
+    success:function(data){
+        if(data=='Exists'){
+            $('#result').html('Bu foydalanuvchi mavjud').addClass('text-danger');
+            $('#submitbtn').attr('disabled','disabled');
+        }else if(pwd1!==pwd2){
+            $('#resultpwd').html('Birinchi parol tastiqlovchi parolga mos emas').addClass('text-danger');
+            $('#password2').addClass('alert alert-danger');
+            $('#submitbtn').attr('disabled','disabled');
+        }else{
+            $('#result').html('');
+            $('#resultpwd').html('');
+            $('#password2').removeClass('alert alert-danger');
+            $('#submitbtn').removeAttr('disabled');
+            $('#username').removeClass('alert alert-danger');
+            $('#submitbtn').removeAttr('disabled','disabled');
+        }
+    }
+  })
+}
+</script>
+{% endblock %}

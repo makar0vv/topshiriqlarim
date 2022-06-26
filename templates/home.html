@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block title %} Mening topshiriqlarim | by: X.A{% endblock %}
+{% block mycontent %}
+<style>
+    body{
+    background: linear-gradient(to right, #0062E6, #33AEFF);
+    }
+</style>
+<div class="container mt-2">
+    <div class="row">
+        <div class="col-md-4 mt-5">
+            <div class="card shadow p-3 mt-3">
+                <form method="post">
+                    {% csrf_token %}
+                <div class="form-group">
+                    <label class="form-label"><strong>Yangi topshiriqlar:</strong></label>
+                    <input type="text" class="form-control" name="task" placeholder="Yangi topshiriqlaringizni kiriting. . .">
+                    {%if taskerror%}
+                    <p style="color:red;">{{taskerror}}</p>
+                    {%endif%}
+                </div>
+                <div class="form-group mt-2">
+                    <input type="submit" class="btn btn-success mt-2" value="Topshiriqni qo'shish">
+                </div>
+            </form>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <h1 class="text-center text-light">Barcha topshiriqlar soni -  {{tasks|length}}</h1>
+            <hr>
+            {% for task in tasks%}
+            <div class="d-flex justify-content-between">
+                <h4>{{task.task}}</h4>
+               <div>
+                    <p style="color:white;"class="d-inline-block ">({{task.created_at|date}})</p>
+                    <a href="{% url 'task-edit-page' task.id %}" class="btn btn-warning me-2">Tahrirlash</a>
+                    <a href="{% url 'task-delete-page' task.id %}" class="btn btn-danger">O'chirish</a>
+               </div>
+            </div>
+            <hr>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
